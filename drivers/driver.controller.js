@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const driverService = require("./driver.service");
-const authorize = require("_helpers/authorize");
-const Role = require("_helpers/role");
 
 // routes
 router.post("/login", authenticate);
@@ -15,7 +13,6 @@ router.delete("/driver/:id/suspend", _delete);
 module.exports = router;
 
 function authenticate(req, res, next) {
-    console.log("Evans")
   driverService
     .authenticate(req.body)
     .then((user) =>
@@ -40,25 +37,10 @@ function getAll(req, res, next) {
     .catch((err) => next(err));
 }
 
-function getCurrent(req, res, next) {
-  driverService
-    .getById(req.user.sub)
-    .then((user) => (user ? res.json(user) : res.sendStatus(404)))
-    .catch((err) => next(err));
-}
-
 function getById(req, res, next) {
-    console.log("Mwongera")
   driverService
     .getById(req.params.id)
     .then((user) => (user ? res.json(user) : res.sendStatus(404)))
-    .catch((err) => next(err));
-}
-
-function update(req, res, next) {
-  driverService
-    .update(req.params.id, req.body)
-    .then(() => res.json({message: '204 OK'}))
     .catch((err) => next(err));
 }
 

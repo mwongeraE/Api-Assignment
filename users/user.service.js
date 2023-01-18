@@ -33,7 +33,6 @@ async function getAll() {
 
 async function getById(id) {
     const user = await User.findById(id);
-    console.log("DB USER zz", user)
     return {
         ...user.toJSON()
     } 

@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const db = require("../_helpers/db");
 const Role = require("_helpers/role");
-const User = db.Driver;
+const Driver = db.Driver;
 
 module.exports = {
   authenticate,
@@ -15,7 +15,7 @@ module.exports = {
 };
 
 async function authenticate({ username, password }) {
-  const driver = await User.findOne({ username });
+  const driver = await Driver.findOne({ username });
   if (driver && bcrypt.compareSync(password, driver.hash)) {
     const token = jwt.sign({ sub: driver.id }, config.secret, {
       expiresIn: "7d",
@@ -28,12 +28,11 @@ async function authenticate({ username, password }) {
 }
 
 async function getAll() {
-  return await User.find();
+  return await Driver.find();
 }
 
 async function getById(id) {
-    const driver = await User.findById(id);
-    console.log("DRIVER DB USER", driver)
+    const driver = await Driver.findById(id);
     return {
         ...driver.toJSON()
     }
@@ -41,11 +40,16 @@ async function getById(id) {
 
 async function create(userParam) {
   // validate
-  if (await User.findOne({ username: userParam.username })) {
+  if (await Driver.findOne({ username: userParam.username })) {
     throw 'Username "' + userParam.username + '" is already taken';
   }
 
-  const driver = new User(userParam);
+  const finalPayload = {
+    suspended: false,
+    ...userParam
+  }
+
+  const driver = new Driver(finalPayload);
 
   // hash password
   if (userParam.password) {
@@ -60,13 +64,13 @@ async function create(userParam) {
 }
 
 async function update(id, userParam) {
-  const driver = await User.findById(id);
+  const driver = await Driver.findById(id);
 
   // validate
   if (!driver) throw "User not found";
   if (
     driver.username !== userParam.username &&
-    (await User.findOne({ username: userParam.username }))
+    (await Driver.findOne({ username: userParam.username }))
   ) {
     throw 'Username "' + userParam.username + '" is already taken';
   }
@@ -83,5 +87,5 @@ async function update(id, userParam) {
 }
 
 async function _delete(id) {
-  await User.findByIdAndRemove(id);
+  await Driver.findByIdAndRemove(id);
 }
