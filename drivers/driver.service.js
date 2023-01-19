@@ -2,7 +2,6 @@ const config = require("../config.json");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const db = require("../_helpers/db");
-const Role = require("_helpers/role");
 const Driver = db.Driver;
 
 module.exports = {

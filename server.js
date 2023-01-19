@@ -24,7 +24,9 @@ app.use('/rides', require('./ride/ride.controller'));
 // global error handler
 app.use(errorHandler);
 
-const port = process.env.PORT || 4000;
+const port = 4000;
 app.listen(port, () => {
-    console.log(`listening on ${port}`);
+    // console.log(`listening on ${port}`);
 });
+
+module.exports = app
