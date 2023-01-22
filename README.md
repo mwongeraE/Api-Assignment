@@ -1,4 +1,4 @@
-# Api Asignment
+# Api Assignment
 
 This is a short description of the project and how to run it locally.
 
